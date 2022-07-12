@@ -5,8 +5,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const isVideo_1 = __importDefault(require("../queries/isVideo"));
 const types_1 = require("../types");
-const uploadPlaceholder_1 = require("../lib/uploadPlaceholder");
+const prosemirror_state_1 = require("prosemirror-state");
+const prosemirror_view_1 = require("prosemirror-view");
 const insertFiles = function (view, event, pos, files, options) {
+    const uploadPlaceholderPlugin = new prosemirror_state_1.Plugin({
+        state: {
+            init() {
+                return prosemirror_view_1.DecorationSet.empty;
+            },
+            apply(tr, set) {
+                set = set.map(tr.mapping, tr.doc);
+                const action = tr.getMeta(this);
+                if (action && action.add) {
+                    const element = document.createElement("div");
+                    element.className = "image placeholder";
+                    const isFileVideo = isVideo_1.default(action.add.file.name);
+                    const media = document.createElement(isFileVideo ? "video" : "img");
+                    media.src = URL.createObjectURL(action.add.file);
+                    if (isFileVideo) {
+                        media.style.width = "100%";
+                        media.style.height = "100%";
+                        media.controls = true;
+                    }
+                    element.appendChild(media);
+                    const deco = prosemirror_view_1.Decoration.widget(action.add.pos, element, {
+                        id: action.add.id,
+                    });
+                    set = set.add(tr.doc, [deco]);
+                }
+                else if (action && action.remove) {
+                    set = set.remove(set.find(null, null, (spec) => spec.id === action.remove.id));
+                }
+                return set;
+            },
+        },
+        props: {
+            decorations(state) {
+                return this.getState(state);
+            },
+        },
+    });
+    const findPlaceholder = (state, id) => {
+        const decos = uploadPlaceholderPlugin.getState(state);
+        const found = decos.find(null, null, (spec) => spec.id === id);
+        return found.length ? found[0].from : null;
+    };
     const images = files.filter((file) => /image/i.test(file.type));
     const videos = files.filter((file) => /video/i.test(file.type));
     if (images.length === 0 && videos.length === 0)
@@ -25,7 +68,7 @@ const insertFiles = function (view, event, pos, files, options) {
     for (const file of validFile) {
         const id = {};
         const { tr } = view.state;
-        tr.setMeta(uploadPlaceholder_1.uploadPlaceholderPlugin, {
+        tr.setMeta(uploadPlaceholderPlugin, {
             add: { id, file, pos },
         });
         view.dispatch(tr);
@@ -36,12 +79,12 @@ const insertFiles = function (view, event, pos, files, options) {
                 ? document.createElement("video")
                 : new Image();
             const initFileLoad = () => {
-                const pos = uploadPlaceholder_1.findPlaceholder(view.state, id);
+                const pos = findPlaceholder(view.state, id);
                 if (pos === null)
                     return;
                 const transaction = view.state.tr
                     .replaceWith(pos, pos, schema.nodes.image.create({ src }))
-                    .setMeta(uploadPlaceholder_1.uploadPlaceholderPlugin, { remove: { id } });
+                    .setMeta(uploadPlaceholderPlugin, { remove: { id } });
                 view.dispatch(transaction);
             };
             if (isFileVideo) {
@@ -59,7 +102,7 @@ const insertFiles = function (view, event, pos, files, options) {
         })
             .catch((error) => {
             console.error(error);
-            const transaction = view.state.tr.setMeta(uploadPlaceholder_1.uploadPlaceholderPlugin, {
+            const transaction = view.state.tr.setMeta(uploadPlaceholderPlugin, {
                 remove: { id },
             });
             view.dispatch(transaction);

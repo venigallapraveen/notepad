@@ -7,10 +7,11 @@ import { InputRule } from "prosemirror-inputrules";
 import styled from "styled-components";
 import ImageZoom from "react-medium-image-zoom";
 import getDataTransferFiles from "../lib/getDataTransferFiles";
-import {uploadPlaceholderPlugin} from "../lib/uploadPlaceholder";
+// import {uploadPlaceholderPlugin} from "../lib/uploadPlaceholder";
 import insertFiles from "../commands/insertFiles";
 import Node from "./Node";
-
+import { Decoration, DecorationSet } from "prosemirror-view";
+import isVideo from "../queries/isVideo";
 /**
  * Matches following attributes in Markdown-typed image: [, alt, src, class]
  *
@@ -437,6 +438,54 @@ export default class Image extends Node {
    }
 
    get plugins() {
+      const uploadPlaceholderPlugin = new Plugin({
+   state: {
+      init() {
+         return DecorationSet.empty;
+      },
+      apply(tr, set) {
+         // Adjust decoration positions to changes made by the transaction
+         set = set.map(tr.mapping, tr.doc);
+
+         // See if the transaction adds or removes any placeholders
+         const action = tr.getMeta(this);
+
+         if (action && action.add) {
+            const element = document.createElement("div");
+            element.className = "image placeholder";
+
+            const isFileVideo = isVideo(action.add.file.name);
+
+            const media = document.createElement(isFileVideo ? "video" : "img");
+            media.src = URL.createObjectURL(action.add.file);
+
+            if (isFileVideo) {
+               media.style.width = "100%";
+               media.style.height = "100%";
+               //@ts-ignore
+               media.controls = true;
+            }
+
+            element.appendChild(media);
+
+            const deco = Decoration.widget(action.add.pos, element, {
+               id: action.add.id,
+            });
+            set = set.add(tr.doc, [deco]);
+         } else if (action && action.remove) {
+            set = set.remove(
+               set.find(null, null, (spec) => spec.id === action.remove.id)
+            );
+         }
+         return set;
+      },
+   },
+   props: {
+      decorations(state) {
+         return this.getState(state);
+      },
+   },
+});
       return [uploadPlaceholderPlugin, uploadPlugin(this.options)];
    }
 }

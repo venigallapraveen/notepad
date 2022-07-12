@@ -1,10 +1,10 @@
+import { Plugin } from "prosemirror-state";
 import { Decoration, DecorationSet } from "prosemirror-view";
 import isVideo from "../queries/isVideo";
 
-var Prosemirror = require('prosemirror-state');
 
 // based on the example at: https://prosemirror.net/examples/upload/
-export const uploadPlaceholderPlugin = new Prosemirror.Plugin({
+export const uploadPlaceholderPlugin = new Plugin({
    state: {
       init() {
          return DecorationSet.empty;
