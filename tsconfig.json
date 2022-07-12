@@ -19,7 +19,8 @@
       "declarationMap": true,
       "declaration": true,
       "skipDefaultLibCheck": true,
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "allowSyntheticDefaultImports": true,
    },
    "include": ["src/**/*"],
    "exclude": ["dist", "node_modules"]
