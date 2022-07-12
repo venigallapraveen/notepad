@@ -5,12 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const isVideo_1 = __importDefault(require("../queries/isVideo"));
 const types_1 = require("../types");
-const uploadPlaceholder_1 = __importDefault(require("../lib/uploadPlaceholder"));
-function findPlaceholder(state, id) {
-    const decos = uploadPlaceholder_1.default.getState(state);
-    const found = decos.find(null, null, (spec) => spec.id === id);
-    return found.length ? found[0].from : null;
-}
+const uploadPlaceholder_1 = require("../lib/uploadPlaceholder");
 const insertFiles = function (view, event, pos, files, options) {
     const images = files.filter((file) => /image/i.test(file.type));
     const videos = files.filter((file) => /video/i.test(file.type));
@@ -30,7 +25,7 @@ const insertFiles = function (view, event, pos, files, options) {
     for (const file of validFile) {
         const id = {};
         const { tr } = view.state;
-        tr.setMeta(uploadPlaceholder_1.default, {
+        tr.setMeta(uploadPlaceholder_1.uploadPlaceholderPlugin, {
             add: { id, file, pos },
         });
         view.dispatch(tr);
@@ -41,12 +36,12 @@ const insertFiles = function (view, event, pos, files, options) {
                 ? document.createElement("video")
                 : new Image();
             const initFileLoad = () => {
-                const pos = findPlaceholder(view.state, id);
+                const pos = uploadPlaceholder_1.findPlaceholder(view.state, id);
                 if (pos === null)
                     return;
                 const transaction = view.state.tr
                     .replaceWith(pos, pos, schema.nodes.image.create({ src }))
-                    .setMeta(uploadPlaceholder_1.default, { remove: { id } });
+                    .setMeta(uploadPlaceholder_1.uploadPlaceholderPlugin, { remove: { id } });
                 view.dispatch(transaction);
             };
             if (isFileVideo) {
@@ -64,7 +59,7 @@ const insertFiles = function (view, event, pos, files, options) {
         })
             .catch((error) => {
             console.error(error);
-            const transaction = view.state.tr.setMeta(uploadPlaceholder_1.default, {
+            const transaction = view.state.tr.setMeta(uploadPlaceholder_1.uploadPlaceholderPlugin, {
                 remove: { id },
             });
             view.dispatch(transaction);

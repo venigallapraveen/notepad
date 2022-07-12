@@ -30,7 +30,7 @@ export default class CodeFence extends Node {
         toDOM: (node: any) => (string | {
             class: string;
             "data-language": any;
-        } | (string | HTMLButtonElement | HTMLSelectElement | {
+        } | (string | HTMLSelectElement | HTMLButtonElement | {
             contentEditable: boolean;
         })[] | (string | (string | number | {
             spellCheck: boolean;

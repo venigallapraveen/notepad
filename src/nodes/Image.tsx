@@ -7,7 +7,7 @@ import { InputRule } from "prosemirror-inputrules";
 import styled from "styled-components";
 import ImageZoom from "react-medium-image-zoom";
 import getDataTransferFiles from "../lib/getDataTransferFiles";
-import uploadPlaceholderPlugin from "../lib/uploadPlaceholder";
+import {uploadPlaceholderPlugin} from "../lib/uploadPlaceholder";
 import insertFiles from "../commands/insertFiles";
 import Node from "./Node";
 

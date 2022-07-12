@@ -1,11 +1,10 @@
+import { Plugin } from "prosemirror-state";
 import { Decoration, DecorationSet } from "prosemirror-view";
 import isVideo from "../queries/isVideo";
 
-const PS = require('prosemirror-state').default;
 
-const Plugin = PS.Plugin;
 // based on the example at: https://prosemirror.net/examples/upload/
-const uploadPlaceholder = new Plugin({
+export const uploadPlaceholderPlugin = new Plugin({
    state: {
       init() {
          return DecorationSet.empty;
@@ -54,10 +53,10 @@ const uploadPlaceholder = new Plugin({
    },
 });
 
-export default uploadPlaceholder;
+// export default uploadPlaceholder;
 
-// export function findPlaceholder(state, id) {
-//    const decos = uploadPlaceholder.getState(state);
-//    const found = decos.find(null, null, (spec) => spec.id === id);
-//    return found.length ? found[0].from : null;
-// }
+export function findPlaceholder(state, id) {
+   const decos = uploadPlaceholderPlugin.getState(state);
+   const found = decos.find(null, null, (spec) => spec.id === id);
+   return found.length ? found[0].from : null;
+}

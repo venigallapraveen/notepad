@@ -29,7 +29,7 @@ const prosemirror_inputrules_1 = require("prosemirror-inputrules");
 const styled_components_1 = __importDefault(require("styled-components"));
 const react_medium_image_zoom_1 = __importDefault(require("react-medium-image-zoom"));
 const getDataTransferFiles_1 = __importDefault(require("../lib/getDataTransferFiles"));
-const uploadPlaceholder_1 = __importDefault(require("../lib/uploadPlaceholder"));
+const uploadPlaceholder_1 = require("../lib/uploadPlaceholder");
 const insertFiles_1 = __importDefault(require("../commands/insertFiles"));
 const Node_1 = __importDefault(require("./Node"));
 const IMAGE_INPUT_REGEX = /!\[(?<alt>[^\]\[]*?)]\((?<filename>[^\]\[]*?)(?=\“|\))\“?(?<layoutclass>[^\]\[\”]+)?\”?\)$/;
@@ -345,7 +345,7 @@ class Image extends Node_1.default {
         ];
     }
     get plugins() {
-        return [uploadPlaceholder_1.default, uploadPlugin(this.options)];
+        return [uploadPlaceholder_1.uploadPlaceholderPlugin, uploadPlugin(this.options)];
     }
 }
 exports.default = Image;
