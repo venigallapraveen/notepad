@@ -54,8 +54,8 @@ const uploadPlaceholder = new Plugin({
 
 export default uploadPlaceholder;
 
-export function findPlaceholder(state, id) {
-   const decos = uploadPlaceholder.getState(state);
-   const found = decos.find(null, null, (spec) => spec.id === id);
-   return found.length ? found[0].from : null;
-}
+// export function findPlaceholder(state, id) {
+//    const decos = uploadPlaceholder.getState(state);
+//    const found = decos.find(null, null, (spec) => spec.id === id);
+//    return found.length ? found[0].from : null;
+// }

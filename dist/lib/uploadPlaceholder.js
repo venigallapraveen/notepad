@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findPlaceholder = void 0;
 const prosemirror_state_1 = require("prosemirror-state");
 const prosemirror_view_1 = require("prosemirror-view");
 const isVideo_1 = __importDefault(require("../queries/isVideo"));
@@ -45,10 +44,4 @@ const uploadPlaceholder = new prosemirror_state_1.Plugin({
     },
 });
 exports.default = uploadPlaceholder;
-function findPlaceholder(state, id) {
-    const decos = uploadPlaceholder.getState(state);
-    const found = decos.find(null, null, (spec) => spec.id === id);
-    return found.length ? found[0].from : null;
-}
-exports.findPlaceholder = findPlaceholder;
 //# sourceMappingURL=uploadPlaceholder.js.map

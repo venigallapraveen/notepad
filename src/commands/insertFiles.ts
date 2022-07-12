@@ -1,8 +1,14 @@
-import uploadPlaceholderPlugin, {
-  findPlaceholder,
-} from "../lib/uploadPlaceholder";
 import isVideo from "../queries/isVideo";
 import { ToastType } from "../types";
+import uploadPlaceholderPlugin from "../lib/uploadPlaceholder";
+
+function findPlaceholder(state: any, id: any) {
+   const decos = uploadPlaceholderPlugin.getState(state);
+   const found = decos.find(null, null, (spec: any) => spec.id === id);
+   return found.length ? found[0].from : null;
+}
+
+
 
 const insertFiles = function(view, event, pos, files, options) {
   // filter to only include image files
