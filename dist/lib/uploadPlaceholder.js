@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findPlaceholder = exports.uploadPlaceholderPlugin = void 0;
-const prosemirror_state_1 = require("prosemirror-state");
 const prosemirror_view_1 = require("prosemirror-view");
 const isVideo_1 = __importDefault(require("../queries/isVideo"));
-exports.uploadPlaceholderPlugin = new prosemirror_state_1.Plugin({
+const Plugin = require('prosemirror-state').Plugin;
+exports.uploadPlaceholderPlugin = new Plugin({
     state: {
         init() {
             return prosemirror_view_1.DecorationSet.empty;
