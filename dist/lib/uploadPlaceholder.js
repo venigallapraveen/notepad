@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.findPlaceholder = exports.uploadPlaceholderPlugin = void 0;
 const prosemirror_view_1 = require("prosemirror-view");
 const isVideo_1 = __importDefault(require("../queries/isVideo"));
-const Plugin = require('prosemirror-state').Plugin;
-const _uploadPlaceholderPlugin = () => new Plugin({
+var Prosemirror = require('prosemirror-state');
+exports.uploadPlaceholderPlugin = new Prosemirror.Plugin({
     state: {
         init() {
             return prosemirror_view_1.DecorationSet.empty;
@@ -44,7 +44,6 @@ const _uploadPlaceholderPlugin = () => new Plugin({
         },
     },
 });
-exports.uploadPlaceholderPlugin = _uploadPlaceholderPlugin();
 function findPlaceholder(state, id) {
     const decos = exports.uploadPlaceholderPlugin.getState(state);
     const found = decos.find(null, null, (spec) => spec.id === id);
