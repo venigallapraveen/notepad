@@ -5,7 +5,7 @@ const Plugin = require('prosemirror-state').Plugin;
 
 
 // based on the example at: https://prosemirror.net/examples/upload/
-export const uploadPlaceholderPlugin = new Plugin({
+ const _uploadPlaceholderPlugin =()=> new Plugin({
    state: {
       init() {
          return DecorationSet.empty;
@@ -53,6 +53,8 @@ export const uploadPlaceholderPlugin = new Plugin({
       },
    },
 });
+
+export const uploadPlaceholderPlugin = _uploadPlaceholderPlugin()
 
 // export default uploadPlaceholder;
 
