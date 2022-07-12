@@ -1,4 +1,3 @@
-import { Plugin } from "prosemirror-state";
-declare const uploadPlaceholder: Plugin<any, any>;
+declare const uploadPlaceholder: any;
 export default uploadPlaceholder;
 //# sourceMappingURL=uploadPlaceholder.d.ts.map

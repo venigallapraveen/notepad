@@ -1,4 +1,3 @@
-import { Plugin } from "prosemirror-state";
 import { InputRule } from "prosemirror-inputrules";
 import Node from "./Node";
 export default class Image extends Node {
@@ -83,6 +82,6 @@ export default class Image extends Node {
     inputRules({ type }: {
         type: any;
     }): InputRule<any>[];
-    get plugins(): Plugin<any, any>[];
+    get plugins(): any[];
 }
 //# sourceMappingURL=Image.d.ts.map
