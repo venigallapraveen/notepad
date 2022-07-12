@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const prosemirror_view_1 = require("prosemirror-view");
 const isVideo_1 = __importDefault(require("../queries/isVideo"));
-const Plugin = require('prosemirror-state').Plugin;
+const { Plugin } = require('prosemirror-state').default;
 const uploadPlaceholder = new Plugin({
     state: {
         init() {

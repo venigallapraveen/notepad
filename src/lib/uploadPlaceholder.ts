@@ -1,7 +1,7 @@
 import { Decoration, DecorationSet } from "prosemirror-view";
 import isVideo from "../queries/isVideo";
 
-const Plugin = require('prosemirror-state').Plugin;
+const {Plugin} = require('prosemirror-state').default;
 
 
 // based on the example at: https://prosemirror.net/examples/upload/
